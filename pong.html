@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <title></title>
+  </head>
+  <body>
+    <h1>PONG</h1>
+    <h2>PLAYER 1:<span id="upaddle"></span></h2>
+    <h2>PLAYER 2:<span id="paddle"></span></h2>
+    <canvas id="myCanvas" width="300" height="300" >
+    Your browser does not support the HTML5 canvas tag.
+    </canvas>
+    <script type="text/javascript">
+      var canvas=document.getElementById("myCanvas");
+      var ctx=canvas.getContext("2d");
+      var width=40;
+      var height=10;
+      var paddle={
+        start:130,
+        startheight:290,
+        speed:25,
+        points:0,
+        isMoving:false
+      };
+      var upperPaddle={
+        start:130,
+        startheight:0,
+        isMoving:false,
+        speed:25,
+        points:0,
+        isMoving:false
+      };
+      var ball={
+        side:5,
+        speedX:2,
+        speedY:1,
+        start:145,
+        startheight:145,
+        isStarting:true
+      };
+      window.addEventListener("keydown",checkKeyPress,false);
+      function checkKeyPress(key){
+          if(key.keyCode=="37"){
+            if(paddle.speed<0){
+              paddle.isMoving=true;
+            }
+            else{
+             paddle.speed*=-1;
+             paddle.isMoving=true;
+            }
+          }
+          if(key.keyCode=="39"){
+            if(paddle.speed>0){
+              paddle.isMoving=true;
+            }
+            else{
+             paddle.speed*=-1;
+             paddle.isMoving=true;
+            }
+          }
+          if(key.keyCode=="65"){
+            if(upperPaddle.speed<0){
+              upperPaddle.isMoving=true;
+            }
+            else{
+             upperPaddle.speed*=-1;
+             upperPaddle.isMoving=true;
+            }
+          }
+          if(key.keyCode=="68"){
+            if(upperPaddle.speed>0){
+              upperPaddle.isMoving=true;
+            }
+            else{
+             upperPaddle.speed*=-1;
+             upperPaddle.isMoving=true;
+            }
+          }
+        };
+
+      function update(){
+        if((ball.startheight+ball.side)>=canvas.height)
+        {
+          ball.start=145;
+          ball.startheight=145;
+          upperPaddle.points++;
+          var player1points = document.getElementById("upaddle");
+          player1points.innerText = upperPaddle.points;
+        }
+        else if((ball.startheight+ball.side)<=0){
+          ball.start=145;
+          ball.startheight=145;
+          paddle.points++;
+          var player2points = document.getElementById("paddle");
+          player2points.innerText = paddle.points;
+        }
+        if((paddle.start+width)>=canvas.width){
+          paddle.start=260;
+        }
+        if((paddle.start)<=0){
+          paddle.start=0;
+        }
+        if((upperPaddle.start+width)>=canvas.width){
+          upperPaddle.start=260;
+        }
+        if((upperPaddle.start)<=0){
+          upperPaddle.start=0;
+        }
+        if((ball.start+ball.side)>=canvas.width || (ball.start+ball.side)<=0){
+          ball.speedX*=-1;
+        }
+        if((ball.startheight+ball.side)==paddle.startheight && (ball.start>=paddle.start && (ball.start)<=(paddle.start+width))){
+          ball.speedY*=-1;
+        }
+        if((ball.startheight)==(upperPaddle.startheight+height) && ((ball.start)>=upperPaddle.start && (ball.start)<=(upperPaddle.start+width))){
+          ball.speedY*=-1;
+        }
+        ball.start+=ball.speedX;
+        ball.startheight+=ball.speedY;
+        if(paddle.isMoving){
+          paddle.start+=paddle.speed;
+          paddle.isMoving=false;
+        }
+        if(upperPaddle.isMoving){
+          upperPaddle.start+=upperPaddle.speed;
+          upperPaddle.isMoving=false;
+        }
+        if(upperPaddle.points==10){
+          alert("PLAYER 1 WON");
+          document.location.reload()
+        }
+        else if(paddle.points==10){
+          alert("PLAYER 2 WON");
+          document.location.reload()
+        }
+      };
+      var draw=function(){
+        ctx.clearRect(0,0,300,300);
+        ctx.fillStyle="#fff";
+        ctx.strokeStyle = "#fff";
+        ctx.beginPath();
+        ctx.setLineDash([5, 7]);/*dashes are 5px and spaces are 3px*/
+        ctx.moveTo(0,150);
+        ctx.lineTo(300, 150);
+        ctx.stroke();
+        ctx.fillRect(paddle.start,paddle.startheight,width,height);
+        ctx.fillRect(upperPaddle.start,upperPaddle.startheight,width,height);
+        ctx.fillRect(ball.start,ball.startheight,ball.side,ball.side);
+    };
+    var step=function(){
+      update();
+      draw();
+      window.requestAnimationFrame(step);
+      //console.log(upperPaddle.points);
+      //console.log(paddle.points);
+    };
+    step();
+    </script>
+  </body>
+</html>

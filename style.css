@@ -1,0 +1,26 @@
+body{
+  background-color:black;
+  color:white;
+  font-family: VCR_OSD_MONO_1;
+  text-align: center;
+}
+h1{
+  font-size:50px;
+}
+canvas{
+  /*background-color:black;*/
+  border:3px solid #fff;
+  position: fixed; /* or absolute */
+  width:auto;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  margin-top: -150px;
+  margin-left: -155px;
+}
+@font-face {
+  font-family: Minecraft;
+  src: url(Minecraft.ttf);
+  font-family:VCR_OSD_MONO_1;
+  src:url(VCR_OSD_MONO_1.ttf);
+}
